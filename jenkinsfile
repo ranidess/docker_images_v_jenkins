@@ -37,5 +37,11 @@ pipeline {
                 sh 'docker push mca2317/2317_ak'
             }
         }
+       stage('Run in Daemon Mode') {
+            steps {
+                // Running the Docker container in daemon mode
+                sh 'docker run -d --name my_container mca2317/2317_ak'
+            }
+        }
     }
 }
