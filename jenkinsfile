@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    
+    environment {
+        PATH = "/Applications/Docker.app/Contents/Resources/bin:${env.PATH}" // Adjust this path if Docker is installed elsewhere
+    }
+    
+    stages {
+         stage('Clean and Clone Repository') {
+            steps {
+                cleanWs()
+                sh 'git clone https://github.com/ranidess/docker_images_v_jenkins.git'
+            }
+        }
+        stage('List Files') {
+            steps {
+                // List files to verify Dockerfile location
+                dir('docker_images_v_jenkins') {
+                    sh 'ls -la'
+                }
+            }
+        }
+        stage('Build') {
+         steps {
+              dir('docker_images_v_jenkins') {
+                 sh 'docker build -t mca2317/2317_ak -f Dockerfile .'
+            }
+          }
+        }
+        stage('Login') {
+            steps {
+                sh 'docker login -u "mca2317" -p "Ranisona@13" docker.io'
+            }
+        }
+        stage('Push') {
+            steps {
+                sh 'docker push mca2317/2317_ak'
+            }
+        }
+    }
+}
