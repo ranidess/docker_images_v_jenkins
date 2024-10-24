@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Clean and Clone Repository') {
             steps {
+                cleanWs()
                 bat 'git clone https://github.com/ranidess/docker_images_v_jenkins.git'
             }
         }
